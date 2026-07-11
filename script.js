@@ -12,20 +12,65 @@ navMenu.querySelectorAll('a').forEach(link =>
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
-document.getElementById('contactForm').addEventListener('submit', function (event) {
-  event.preventDefault();
-  const data = new FormData(this);
-  const subject = encodeURIComponent(`New project enquiry from ${data.get('name')}`);
-  const body = encodeURIComponent(
-`Name: ${data.get('name')}
-Email: ${data.get('email')}
-Company: ${data.get('company') || '-'}
-Service: ${data.get('service')}
+const contactForm = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+const formNote = document.getElementById('formNote');
+const MAILER_ENDPOINT = 'https://formsubmit.co/ajax/anoopmca15@gmail.com';
 
-Project Details:
-${data.get('message')}`
-  );
-  window.location.href = `mailto:anoopmca15@gmail.com?subject=${subject}&body=${body}`;
+function setFormStatus(message, type = '') {
+  formNote.textContent = message;
+  formNote.className = type ? `form-note form-note--${type}` : 'form-note';
+}
+
+contactForm.addEventListener('submit', async function (event) {
+  event.preventDefault();
+
+  if (contactForm.querySelector('[name="_honey"]').value) return;
+
+  const formData = new FormData(contactForm);
+  const payload = {
+    name: formData.get('name'),
+    email: formData.get('email'),
+    company: formData.get('company') || '-',
+    service: formData.get('service'),
+    message: formData.get('message'),
+    _subject: `New project enquiry from ${formData.get('name')}`,
+    _replyto: formData.get('email'),
+    _template: 'table',
+    _captcha: 'false'
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending...';
+  setFormStatus('Sending your enquiry, please wait...', 'loading');
+
+  try {
+    const response = await fetch(MAILER_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const result = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Unable to send enquiry');
+    }
+
+    contactForm.reset();
+    setFormStatus('Thank you! Your enquiry has been sent successfully. We will get back to you soon.', 'success');
+  } catch (error) {
+    setFormStatus(
+      'Unable to send right now. Please email us directly at anoopmca15@gmail.com or call +91 97119 86743.',
+      'error'
+    );
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Send Enquiry';
+  }
 });
 
 const revealElements = document.querySelectorAll('.reveal');

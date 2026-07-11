@@ -350,7 +350,8 @@
             </div>
           </div>
         </div>
-        <form class="contact-form reveal" id="contactForm">
+        <form class="contact-form reveal" id="contactForm" novalidate>
+          <input type="text" name="_honey" class="honeypot" tabindex="-1" autocomplete="off" aria-hidden="true" />
           <div class="form-row">
             <label>Full Name<input type="text" name="name" required placeholder="Your name" /></label>
             <label>Business Email<input type="email" name="email" required placeholder="you@company.com" /></label>
@@ -360,8 +361,8 @@
             <label>Service<select name="service"><option>Mobile App Development</option><option>Website Development</option><option>Web / Admin Portal</option><option>Reseller Portal</option><option>IT Consulting</option><option>Cloud / AI Solution</option><option>Other</option></select></label>
           </div>
           <label>Project Details<textarea name="message" rows="5" required placeholder="Tell us about your project"></textarea></label>
-          <button type="submit" class="btn btn-primary full">Send Enquiry</button>
-          <p class="form-note" id="formNote">Enquiries are sent to anoopmca15@gmail.com via your email app.</p>
+          <button type="submit" class="btn btn-primary full" id="submitBtn">Send Enquiry</button>
+          <p class="form-note" id="formNote">Your enquiry will be emailed directly to our team at anoopmca15@gmail.com.</p>
         </form>
       </div>
     </section>
