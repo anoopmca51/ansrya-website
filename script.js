@@ -25,7 +25,7 @@ Service: ${data.get('service')}
 Project Details:
 ${data.get('message')}`
   );
-  window.location.href = `mailto:info@ansrya.com?subject=${subject}&body=${body}`;
+  window.location.href = `mailto:anoopmca15@gmail.com?subject=${subject}&body=${body}`;
 });
 
 const revealElements = document.querySelectorAll('.reveal');
